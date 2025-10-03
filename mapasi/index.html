@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive SVG Images</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers the containers horizontally */
+            min-height: 100vh; /* Ensures body takes full viewport height */
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            width: 100%; /* Takes full width of its parent (body) */
+            max-width: 800px; /* Optional: Limit max width for larger screens */
+            margin-bottom: 20px; /* Space between containers */
+            background-color: #fff;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        .container object {
+            width: 100%; /* SVG takes full width of its container */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Remove extra space below object */
+        }
+
+        /* Basic responsiveness for smaller screens */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <object data="image1.svg" type="image/svg+xml">
+            Your browser does not support SVG.
+        </object>
+    </div>
+
+    <div class="container">
+        <object data="image2.svg" type="image/svg+xml">
+            Your browser does not support SVG.
+        </object>
+    </div>
+
+    <div class="container">
+        <object data="image3.svg" type="image/svg+xml">
+            Your browser does not support SVG.
+        </object>
+    </div>
+
+    <div class="container">
+        <object data="image4.svg" type="image/svg+xml">
+            Your browser does not support SVG.
+        </object>
+    </div>
+
+    <div class="container">
+        <object data="image5.svg" type="image/svg+xml">
+            Your browser does not support SVG.
+        </object>
+    </div>
+
+</body>
+</html>
