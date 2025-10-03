@@ -3,74 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive SVG Images</title>
+    <title>Responsive SVG Viewer</title>
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: sans-serif;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centers the containers horizontally */
-            min-height: 100vh; /* Ensures body takes full viewport height */
+            align-items: center; /* Center the containers in a column */
             background-color: #f0f0f0;
         }
-
         .container {
-            width: 100%; /* Takes full width of its parent (body) */
-            max-width: 800px; /* Optional: Limit max width for larger screens */
-            margin-bottom: 20px; /* Space between containers */
-            background-color: #fff;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px; /* Optional: Limit max width for large screens */
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: white;
+            padding: 10px;
             box-sizing: border-box; /* Include padding in width calculation */
         }
-
         .container object {
-            width: 100%; /* SVG takes full width of its container */
-            height: auto; /* Maintain aspect ratio */
-            display: block; /* Remove extra space below object */
+            display: block;
+            width: 100%;
+            height: auto;
+            border: none;
+            transition: transform 0.2s ease-in-out; /* Smooth zoom transition */
         }
-
-        /* Basic responsiveness for smaller screens */
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-                margin-bottom: 15px;
-            }
+        .zoom-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+        .zoom-controls button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .zoom-controls button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <object data="image1.svg" type="image/svg+xml">
-            Your browser does not support SVG.
-        </object>
+        <div class="zoom-controls">
+            <button onclick="zoomIn(this)">Zoom In</button>
+            <button onclick="zoomOut(this)">Zoom Out</button>
+        </div>
+        <object data="image1.svg" type="image/svg+xml"></object>
     </div>
 
     <div class="container">
-        <object data="image2.svg" type="image/svg+xml">
-            Your browser does not support SVG.
-        </object>
+        <div class="zoom-controls">
+            <button onclick="zoomIn(this)">Zoom In</button>
+            <button onclick="zoomOut(this)">Zoom Out</button>
+        </div>
+        <object data="image2.svg" type="image/svg+xml"></object>
     </div>
 
     <div class="container">
-        <object data="image3.svg" type="image/svg+xml">
-            Your browser does not support SVG.
-        </object>
+        <div class="zoom-controls">
+            <button onclick="zoomIn(this)">Zoom In</button>
+            <button onclick="zoomOut(this)">Zoom Out</button>
+        </div>
+        <object data="image3.svg" type="image/svg+xml"></object>
     </div>
 
     <div class="container">
-        <object data="image4.svg" type="image/svg+xml">
-            Your browser does not support SVG.
-        </object>
+        <div class="zoom-controls">
+            <button onclick="zoomIn(this)">Zoom In</button>
+            <button onclick="zoomOut(this)">Zoom Out</button>
+        </div>
+        <object data="image4.svg" type="image/svg+xml"></object>
     </div>
 
     <div class="container">
-        <object data="image5.svg" type="image/svg+xml">
-            Your browser does not support SVG.
-        </object>
+        <div class="zoom-controls">
+            <button onclick="zoomIn(this)">Zoom In</button>
+            <button onclick="zoomOut(this)">Zoom Out</button>
+        </div>
+        <object data="image5.svg" type="image/svg+xml"></object>
     </div>
+
+    <script>
+        function zoomIn(button) {
+            const objectElement = button.closest('.container').querySelector('object');
+            let currentScale = parseFloat(objectElement.style.transform.replace('scale(', '').replace(')', '')) || 1;
+            objectElement.style.transform = `scale(${currentScale * 1.2})`;
+        }
+
+        function zoomOut(button) {
+            const objectElement = button.closest('.container').querySelector('object');
+            let currentScale = parseFloat(objectElement.style.transform.replace('scale(', '').replace(')', '')) || 1;
+            objectElement.style.transform = `scale(${currentScale / 1.2})`;
+        }
+    </script>
 
 </body>
 </html>
