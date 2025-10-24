@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visualizador SVG Interativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ======= BACKGROUND VIDEO ======= */
+  #bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  /* Degradê branco translúcido sobre o vídeo */
+  #bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0.0) 0%, rgba(255,255,255,1.0) 100%);
+    z-index: -1;
+  }
+
+  /* ======= HEADER ======= */
+  #header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    z-index: 10;
+  }
+
+  #menu {
+    background: #000;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  #menu:hover {
+    color: #aaa;
+  }
+
+  /* ======= MENU DROPDOWN ======= */
+  .menu-dropdown {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 9;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #menu:hover + .menu-dropdown,
+  .menu-dropdown:hover {
+    display: flex;
+  }
+
+  .menu-dropdown a {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    margin: 10px 0;
+    transition: color 0.3s;
+  }
+
+  .menu-dropdown a:hover {
+    color: #aaa;
+  }
+
+  /* ======= CONTAINER DO SVG ======= */
+  #objectfile {
+    position: relative;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    width: 90%;
+    height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+  }
+
+  #objectfile object {
+    max-width: 90%;
+    max-height: 90%;
+    transition: transform 0.2s ease;
+    border: none;
+  }
+
+  /* ======= FOOTER ======= */
+  #footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    z-index: 10;
+  }
+
+  #painel {
+    display: flex;
+    gap: 10px;
+  }
+
+  #painel button {
+    background: rgba(0,0,0,0.9);
+    color: white;
+    border: none;
+    border-radius: 0;
+    padding: 6px 12px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  #painel button:hover {
+    color: #aaa;
+  }
+
+  .copyright {
+    position: absolute;
+    right: 20px;
+    color: #aaa;
+    font-size: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .menu-dropdown a {
+      font-size: 18px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- BACKGROUND -->
+  <video id="bg-video" autoplay muted loop>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <div id="bg-overlay"></div>
+
+  <!-- HEADER -->
+  <div id="header">
+    <div id="menu">≡</div>
+    <div class="menu-dropdown">
+      <a href="#" data-file="image1.svg">João Pessoa</a>
+      <a href="#" data-file="image2.svg">CCA - Areia</a>
+      <a href="#" data-file="image3.svg">CCHSA - Bananeiras</a>
+      <a href="#" data-file="image4.svg">CTDR - Mangabeira</a>
+      <a href="#" data-file="image5.svg">Rio Tinto</a>
+      <a href="#" data-file="image6.svg">Mamanguape</a>
+      <a href="#" data-file="image7.svg">CCJ - Santa Rita</a>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div id="objectfile">
+    <object id="svgObject" type="image/svg+xml" data="image1.svg"></object>
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <div id="painel">
+      <button id="zoomIn">+</button>
+      <button id="zoomOut">-</button>
+      <button id="download">Download</button>
+    </div>
+    <div class="copyright">
+      © 2025 UFPB&arte
+    </div>
+  </div>
+
+<script>
+  const svgObject = document.getElementById('svgObject');
+  const zoomInBtn = document.getElementById('zoomIn');
+  const zoomOutBtn = document.getElementById('zoomOut');
+  const downloadBtn = document.getElementById('download');
+  const menuLinks = document.querySelectorAll('.menu-dropdown a');
+
+  let scale = 1;
+
+  // Controle de zoom
+  zoomInBtn.addEventListener('click', () => {
+    scale += 0.1;
+    svgObject.style.transform = `scale(${scale})`;
+  });
+
+  zoomOutBtn.addEventListener('click', () => {
+    scale = Math.max(0.1, scale - 0.1);
+    svgObject.style.transform = `scale(${scale})`;
+  });
+
+  // Download do SVG atual
+  downloadBtn.addEventListener('click', () => {
+    const file = svgObject.getAttribute('data');
+    const a = document.createElement('a');
+    a.href = file;
+    a.download = file.split('/').pop();
+    a.click();
+  });
+
+  // Carregamento dinâmico de SVGs do menu
+  menuLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const file = e.target.getAttribute('data-file');
+      svgObject.setAttribute('data', file);
+      scale = 1;
+      svgObject.style.transform = 'scale(1)';
+
+      // Ajustar escala após o SVG carregar
+      svgObject.addEventListener('load', () => {
+        const svgDoc = svgObject.contentDocument;
+        if (svgDoc) {
+          const svgEl = svgDoc.querySelector('svg');
+          if (svgEl) {
+            const { width, height } = svgEl.getBoundingClientRect();
+            const aspect = width / height;
+            const screenAspect = window.innerWidth / (window.innerHeight * 0.9);
+            svgEl.setAttribute('width', aspect > screenAspect ? '90%' : 'auto');
+            svgEl.setAttribute('height', aspect > screenAspect ? 'auto' : '90%');
+          }
+        }
+      }, { once: true });
+    });
+  });
+</script>
+
+</body>
+</html>
+
