@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campi UFPB</title>
+    <style>
+        /* =========================================================
+           CSS EMBUTIDO
+           ========================================================= */
+
+        /* Variáveis CSS */
+        :root {
+            --menu-bg-color: rgba(0, 0, 0, 0.95); /* Preto quase opaco */
+            --menu-text-color: #ffffff;
+            --menu-fade-duration: 2s; /* Fade do menu */
+            --icon-color: #000000; /* Cor do ícone do menu: Preto */
+        }
+
+        /* Background do root (html) é branco */
+        html {
+            background-color: #ffffff; 
+        }
+
+        /* Base e Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100%;
+            overflow-x: hidden;
+            font-family: sans-serif;
+            background-color: transparent; 
+            position: relative;
+        }
+
+        /* =========================================================
+           BACKGROUND (img1.jpg com Opacidade 20% e Blur 10px)
+           ========================================================= */
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        #background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ocupa toda a tela */
+            display: block;
+            
+            /* Filtros solicitados */
+            opacity: 0.4; /* 20% de Opacidade */
+            filter: blur(2px); /* Blur de 10 pixels */
+        }
+
+
+        /* =========================================================
+           MENU TOP BAR & DROPDOWN
+           ========================================================= */
+        #top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            z-index: 1000; 
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* Ícone de Menu (Hambúrguer) */
+        #menu-icon {
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 5px;
+            position: relative;
+            z-index: 1002;
+        }
+
+        .bar {
+            width: 100%;
+            height: 4px;
+            background-color: var(--icon-color); /* Ícone preto */
+            transition: 0.4s;
+        }
+
+        /* Lista Dropdown */
+        #menu-list {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            max-width: 80%;
+            height: 100%;
+            background-color: var(--menu-bg-color); /* Background Preto */
+            list-style: none;
+            padding-top: 80px;
+            padding-left: 20px;
+            transform: translateX(100%); 
+            transition: transform 0.5s ease-in-out;
+            opacity: 0; 
+            pointer-events: none;
+            z-index: 1001;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        #menu-list.show {
+            transform: translateX(0); /* Exibe */
+            animation: menu-fade-in var(--menu-fade-duration) forwards;
+            pointer-events: auto; /* Ativa cliques */
+        }
+
+        @keyframes menu-fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #menu-list li {
+            margin-bottom: 15px;
+        }
+
+        #menu-list a {
+            color: var(--menu-text-color); /* Texto Branco */
+            text-decoration: none;
+            font-size: 1.2em;
+            display: block;
+            padding: 10px 0;
+            transition: color 0.3s;
+        }
+
+        #menu-list a:hover {
+            color: #4CAF50;
+        }
+
+
+        /* =========================================================
+           CARREGAMENTO DE SVG
+           ========================================================= */
+        #svgload {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent; 
+            /* Largura 100% conforme solicitado */
+            width: 100%; 
+            min-height: calc(100vh - 100px);
+            padding: 60px 20px 40px; 
+            z-index: 1;
+        }
+
+        #svg-object {
+            /* 95% da largura da página (95vw) para dimensionamento proporcional */
+            width: 95vw; 
+            /* A altura é definida automaticamente para manter a proporção (aspect ratio) 
+               do conteúdo SVG carregado, já que a largura está fixa. */
+            height: auto; 
+            display: block;
+            border: none;
+            background-color: transparent; 
+        }
+        
+        /* =========================================================
+           RODAPÉ (Pequeno)
+           ========================================================= */
+        #footer {
+            position: fixed;
+            bottom: 0; /* bottom de 0px */
+            left: 0;
+            width: 100%;
+            text-align: center; /* Centraliza o conteúdo */
+            padding: 5px 0;
+            z-index: 999;
+            color: #aaaaaa; /* Cor cinza */
+            font-size: 0.8em; /* Tamanho muito pequeno */
+            pointer-events: none; 
+            background: rgba(255, 255, 255, 0.7); /* Fundo sutilmente branco para visibilidade */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="background-container">
+        <img id="background-image" src="img1.jpg" alt="Background com opacidade e blur">
+    </div>
+
+
+    <div id="top-bar">
+        <div id="menu-icon">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <ul id="menu-list">
+            <li><a href="#" data-svg="image1.svg" class="menu-link">João Pessoa</a></li>
+            <li><a href="#" data-svg="image2.svg" class="menu-link">CCA - Areia</a></li>
+            <li><a href="#" data-svg="image3.svg" class="menu-link">CCHSA - Bananeiras</a></li>
+            <li><a href="#" data-svg="image4.svg" class="menu-link">CTDR - Mangabeira</a></li>
+            <li><a href="#" data-svg="image5.svg" class="menu-link">Rio Tinto</a></li>
+            <li><a href="#" data-svg="image6.svg" class="menu-link">Manmanguape</a></li>
+            <li><a href="#" data-svg="image7.svg" class="menu-link">CCJ - Santa Rita</a></li>
+        </ul>
+    </div>
+
+
+    <div id="svgload">
+        <object id="svg-object" data="image1.svg" type="image/svg+xml">
+            Seu navegador não suporta SVGs em tag &lt;object&gt;.
+        </object>
+    </div>
+
+
+    <footer id="footer">
+        &copy; artes CampiUFPB - 2005
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuIcon = document.getElementById('menu-icon');
+            const menuList = document.getElementById('menu-list');
+            const menuLinks = document.querySelectorAll('.menu-link');
+            const svgObject = document.getElementById('svg-object');
+            
+            const menuFadeDurationMs = 2000;
+
+            /* =========================================================
+               Função para Fechar/Abrir Menu (com Fade de 2s)
+               ========================================================= */
+            function toggleMenu(show) {
+                const isShowing = menuList.classList.contains('show');
+                const shouldShow = show !== undefined ? show : !isShowing;
+
+                if (shouldShow) {
+                    menuList.classList.add('show');
+                    menuList.style.animation = ''; 
+                } else {
+                    // Animação de fade out
+                    menuList.style.animation = `menu-fade-out ${menuFadeDurationMs / 1000}s forwards`;
+                    setTimeout(() => {
+                        menuList.classList.remove('show');
+                        menuList.style.animation = '';
+                    }, menuFadeDurationMs);
+                }
+            }
+            
+            // Adiciona keyframe de fade-out dinamicamente
+            const style = document.createElement('style');
+            style.textContent += `
+                @keyframes menu-fade-out {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            menuIcon.addEventListener('click', () => toggleMenu());
+
+            /* =========================================================
+               Troca de Conteúdo SVG
+               ========================================================= */
+            menuLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const svgFile = e.target.getAttribute('data-svg');
+
+                    // 1. Carrega o novo SVG
+                    svgObject.data = svgFile;
+
+                    // 2. Fecha o menu com animação de fade
+                    toggleMenu(false);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
